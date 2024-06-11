@@ -1,6 +1,7 @@
 package com.springboot.blog.controller;
 
 //import com.springboot.blog.entity.Category;
+import com.springboot.blog.entity.Category;
 import com.springboot.blog.payload.CategoryDto;
 import com.springboot.blog.service.CategoryService;
 //import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/categories")
@@ -33,6 +36,30 @@ public class CategoryController {
     public ResponseEntity<CategoryDto> getCategory(@PathVariable("id") Long categoryId){
         CategoryDto categoryDto = categoryService.getCategory(categoryId);
         return ResponseEntity.ok(categoryDto);
+    }
+
+    //Build Get All Categories REST API
+    @GetMapping
+
+    public ResponseEntity<List<CategoryDto>> getCategories(){
+        return ResponseEntity.ok(categoryService.getAllCategories());
+    }
+
+    //Build update Category REST API
+    @PutMapping("{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    //RequestBody will extract the request. The JSON from the request and it will convert that JSON into java class object.
+    public ResponseEntity<CategoryDto> updateCategory(@RequestBody CategoryDto categoryDto,
+                                                      @PathVariable("id") Long categoryId){
+        return ResponseEntity.ok(categoryService.updateCategory(categoryDto, categoryId));
+    }
+
+    //Build Delete Category REST API
+    @DeleteMapping("{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<String> deleteCategory(@PathVariable("id") Long categoryId){
+        categoryService.deleteCategory(categoryId);
+        return ResponseEntity.ok("Category deleted successfully");
     }
 
 }
