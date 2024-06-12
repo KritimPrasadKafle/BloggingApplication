@@ -61,6 +61,10 @@ public class SecurityConfig {
         http.csrf().disable()
                 .authorizeRequests(authorize ->
                         authorize.requestMatchers(new AntPathRequestMatcher("/api/**", HttpMethod.GET.name())).permitAll()
+                                .requestMatchers(new AntPathRequestMatcher("/api/auth/**")).permitAll()
+                                .requestMatchers(new AntPathRequestMatcher("/swagger-ui/**")).permitAll()
+                                .requestMatchers(new AntPathRequestMatcher("/v3/api-docs/**")).permitAll()
+                                .requestMatchers(new AntPathRequestMatcher("/swagger-ui.html")).permitAll()
 
                                 .anyRequest().authenticated()
                 ).exceptionHandling(exception -> exception
